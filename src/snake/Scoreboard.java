@@ -22,10 +22,6 @@ public class Scoreboard extends javax.swing.JPanel {
     private String playerName;
     private JLabel scoreLabel;
     
-
-    /**
-     * Creates new form Scoreboard
-     */
     public Scoreboard() {
         initComponents();
         
