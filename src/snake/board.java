@@ -1,0 +1,206 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package snake;
+
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+/**
+ *
+ * @author izaelb
+ */
+public class board extends javax.swing.JPanel {
+    
+    private Snake snake;
+    public static final int NUM_ROWS = 20;
+    public static final int NUM_COLS = 20;
+    private Timer timer;
+    private MyKeyAdapter keyAdapter;
+    private Food food;
+    private FoodFactory foodFactory;
+    private ScoreInterface scoreInterface;
+    
+    
+        class MyKeyAdapter extends KeyAdapter {
+        
+        private boolean paused = false;
+
+        public boolean isPaused() {
+            return paused;
+        }
+
+        public void setPaused(boolean paused) {
+            this.paused = paused;
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    if (snake.getDirection() != Direction.RIGHT) {
+                        snake.setDirection(Direction.LEFT);
+                    }
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    if (snake.getDirection() != Direction.LEFT) {
+                        snake.setDirection(Direction.RIGHT);
+                    }
+                    break;
+                case KeyEvent.VK_UP:
+                    if (snake.getDirection() != Direction.DOWN) {
+                        snake.setDirection(Direction.UP);
+                    }
+                    break;
+                case KeyEvent.VK_DOWN:
+                    if (snake.getDirection() != Direction.UP) {
+                        snake.setDirection(Direction.DOWN);
+                    }
+                    break;
+                case KeyEvent.VK_SPACE:
+                    paused = !paused;
+                    break;
+                default:
+                    break;
+            }
+            repaint();
+        }
+    }
+           
+              
+        
+
+    /**
+     * Creates new form board
+     */
+    public board() {
+        initComponents();
+
+        timer = new Timer(250, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (!keyAdapter.isPaused()) {
+                    tick();
+                }
+            }
+        });
+        
+        setFocusable(true);
+        keyAdapter = new MyKeyAdapter();
+        foodFactory = new FoodFactory();
+        initGame();
+    }
+    
+    
+        public void setScoreInterface(ScoreInterface scoreInterface) {
+        this.scoreInterface = scoreInterface;
+    }
+    
+    private void initGame() {
+        snake = new Snake(4);
+        food = foodFactory.getFood(snake);
+        addKeyListener(keyAdapter);
+        if (scoreInterface != null) {
+            scoreInterface.reset();
+        }
+        timer.start();
+    }
+    
+    private void tick() {
+        if (snake.canMove()) {
+            snake.move();
+            if (snake.eat(food)) {
+                scoreInterface.increment(food.getPoints());
+                food = foodFactory.getFood(snake);
+            }
+            if (food.hasToBeErased()) {
+                food = foodFactory.getFood(snake);
+            }        
+        } else {
+            processGameOver();
+        }
+        
+        repaint();
+        Toolkit.getDefaultToolkit().sync();
+    }
+    
+    private void processGameOver() {
+        timer.stop();
+        removeKeyListener(keyAdapter);
+        int answer = JOptionPane.showConfirmDialog(
+            this,  scoreInterface.getScore() + " points\nNew Game?",
+                   "Game Over", JOptionPane.YES_NO_OPTION);
+        if (answer == 0) {
+            initGame();
+        } else {
+            System.exit(0);
+        }
+        // JFrame parentJFrame = (JFrame) SwingUtilities.getWindowAncestor(this); 
+        // HighScoresDialog dialog = new HighScoresDialog(parentJFrame ,true);
+        // dialog.setGetScorer(getScorer);
+        // dialog.setVisible(true);
+    }
+    
+    
+    int getSquareWidth() {
+        return getWidth() / NUM_COLS;        
+    }
+    
+    int getSquareHeight() {
+        return getHeight() / NUM_ROWS;
+    }
+  
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        drawBackground(g);
+        if (snake != null) {
+            snake.Paint(g, getSquareWidth(), getSquareHeight());
+        }
+        if (food != null) {
+            food.paint(g, getSquareWidth(), getSquareHeight());
+        }        
+    }
+    
+    public void drawBackground(Graphics g) {        
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setStroke(new BasicStroke(2));
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, getWidth()/ NUM_COLS * NUM_COLS, 
+                getHeight() / NUM_ROWS * NUM_ROWS);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}
