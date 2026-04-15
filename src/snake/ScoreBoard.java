@@ -54,6 +54,7 @@ public class ScoreBoard extends javax.swing.JPanel implements ScoreInterface{
 
         scoreL = new javax.swing.JLabel();
 
+        setMinimumSize(new java.awt.Dimension(90, 286));
         setLayout(new java.awt.GridBagLayout());
 
         scoreL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
