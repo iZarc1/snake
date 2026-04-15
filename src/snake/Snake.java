@@ -93,7 +93,42 @@ public class Snake {
         }
         return true;
     }
+    /*
+    public boolean canMove() {
+        int row = nodes.getFirst().getRow();
+        int col = nodes.getFirst().getCol();
+        Node node = null;
+        switch (direction) {
+            case Up:
+                node = new Node(row - 1, col);
+                break;
+            case Down:
+                node = new Node(row + 1, col);
+                break;
+            case Left:
+                node = new Node(row, col - 1);
+                break;
+            case Right:
+                node = new Node(row, col + 1);
+                break;
+        }
+        if (node.getRow() < 0 || node.getRow() >= Board.NUM_ROWS ||
+                node.getCol() < 0 || node.getCol() >= Board.NUM_COLS || colidesWithItself(node)) {
+            return false;
+        }
+                
+        return true;
+    }
     
+    public boolean colidesWithItself(Node nodeX) {
+        for (Node node: nodes) {
+            if (nodeX.getRow() == node.getRow() && nodeX.getCol() == node.getCol()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    */
     public void move() {
         int row = getHeaderRow();
         int col = getHeaderCol();

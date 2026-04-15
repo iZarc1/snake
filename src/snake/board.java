@@ -103,7 +103,7 @@ public class board extends javax.swing.JPanel {
     }
     
     
-        public void setScoreInterface(ScoreInterface scoreInterface) {
+    public void setScoreInterface(ScoreInterface scoreInterface) {
         this.scoreInterface = scoreInterface;
     }
     
