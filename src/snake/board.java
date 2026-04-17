@@ -26,6 +26,7 @@ public class board extends javax.swing.JPanel {
     private Snake snake;
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 20;
+    private static final int DELTA = 250;
     private Timer timer;
     private MyKeyAdapter keyAdapter;
     private Food food;
@@ -87,7 +88,7 @@ public class board extends javax.swing.JPanel {
     public board() {
         initComponents();
 
-        timer = new Timer(250, new ActionListener() {
+        timer = new Timer(DELTA, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (!keyAdapter.isPaused()) {
