@@ -4,6 +4,8 @@
  */
 package snake;
 
+import javax.swing.JMenuItem;
+
 /**
  *
  * @author izaelb
@@ -16,10 +18,33 @@ public class Game extends javax.swing.JFrame {
      * Creates new form Game
      */
     public Game() {
-        initComponents();
-        board2.setScoreInterface(scoreBoard2);
-    }
+    initComponents();
+    board2.setScoreInterface(scoreBoard2);
 
+    // Conectar menú Config
+    JMenuItem configItem = new JMenuItem("Configuración");
+    configItem.addActionListener(e -> {
+        board2.pauseGame();
+        ConfigDialog dialog = new ConfigDialog(this, true);
+            dialog.setVisible(true);
+            if (dialog.isAccepted()) {
+            board2.setDelta(dialog.getDelta());
+        }
+            board2.resumeGame();
+    });
+    jMenu1.add(configItem);
+
+    // Conectar menú Acerca De
+    JMenuItem aboutItem = new JMenuItem("Acerca de");
+    aboutItem.addActionListener(e -> {
+        board2.pauseGame();
+        AboutDialog dialog = new AboutDialog(this, true);
+        dialog.setVisible(true);
+        board2.resumeGame();
+    });
+    
+    jMenu2.add(aboutItem);
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,6 +56,9 @@ public class Game extends javax.swing.JFrame {
 
         scoreBoard2 = new snake.ScoreBoard();
         board2 = new snake.board();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,10 +73,18 @@ public class Game extends javax.swing.JFrame {
         );
         board2Layout.setVerticalGroup(
             board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 324, Short.MAX_VALUE)
+            .addGap(0, 299, Short.MAX_VALUE)
         );
 
         getContentPane().add(board2, java.awt.BorderLayout.CENTER);
+
+        jMenu1.setText("Config");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Acerca De");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -90,6 +126,9 @@ public class Game extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private snake.board board2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private snake.ScoreBoard scoreBoard2;
     // End of variables declaration//GEN-END:variables
 }

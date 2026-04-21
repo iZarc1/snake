@@ -33,6 +33,14 @@ public class board extends javax.swing.JPanel {
     private FoodFactory foodFactory;
     private ScoreInterface scoreInterface;
     
+    public void pauseGame() {
+        timer.stop();
+    }
+
+    public void resumeGame() {
+        timer.start();
+    }
+    
     
         class MyKeyAdapter extends KeyAdapter {
         
@@ -204,4 +212,8 @@ public class board extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    public void setDelta(int delta) {
+        timer.setDelay(delta);
+    }
+
 }
