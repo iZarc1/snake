@@ -1,0 +1,11 @@
+Jugador,10
+IZar,310
+Jugador,0
+Jugador,10
+Jugador,0
+Jugador,50
+Jugador,50
+Jugador,10
+Jugador,0
+,120
+,220

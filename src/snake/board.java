@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -32,6 +33,11 @@ public class board extends javax.swing.JPanel {
     private Food food;
     private FoodFactory foodFactory;
     private ScoreInterface scoreInterface;
+    private String playerName = "Jugador";
+
+    public void setPlayerName(String name) {
+        this.playerName = name;
+    }
     
     public void pauseGame() {
         timer.stop();
@@ -123,6 +129,7 @@ public class board extends javax.swing.JPanel {
         if (scoreInterface != null) {
             scoreInterface.reset();
         }
+        Sound.playBackground("background.wav");
         timer.start();
     }
     
@@ -130,6 +137,7 @@ public class board extends javax.swing.JPanel {
         if (snake.canMove()) {
             snake.move();
             if (snake.eat(food)) {
+                Sound.play("eat.wav");
                 scoreInterface.increment(food.getPoints());
                 food = foodFactory.getFood(snake);
             }
@@ -146,19 +154,21 @@ public class board extends javax.swing.JPanel {
     
     private void processGameOver() {
         timer.stop();
+        Sound.stopBackground();
+        Sound.play("gameover.wav");
         removeKeyListener(keyAdapter);
+    
+        ScoreManager.saveScore(playerName, scoreInterface.getScore());
+    
+        List<String> top = ScoreManager.getTopScores();
+        String topStr = String.join("\n", top);
+    
         int answer = JOptionPane.showConfirmDialog(
-            this,  scoreInterface.getScore() + " points\nNew Game?",
-                   "Game Over", JOptionPane.YES_NO_OPTION);
-        if (answer == 0) {
-            initGame();
-        } else {
-            System.exit(0);
-        }
-        // JFrame parentJFrame = (JFrame) SwingUtilities.getWindowAncestor(this); 
-        // HighScoresDialog dialog = new HighScoresDialog(parentJFrame ,true);
-        // dialog.setGetScorer(getScorer);
-        // dialog.setVisible(true);
+            this, scoreInterface.getScore() + " puntos\n\nTop 5:\n" + topStr + "\n\n¿Nueva partida?",
+            "Game Over", JOptionPane.YES_NO_OPTION);
+    
+        if (answer == 0) initGame();
+        else System.exit(0);
     }
     
     

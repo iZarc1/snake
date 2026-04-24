@@ -21,26 +21,33 @@ public class Game extends javax.swing.JFrame {
     initComponents();
     board2.setScoreInterface(scoreBoard2);
 
-    // Conectar menú Config
+    //Config
     JMenuItem configItem = new JMenuItem("Configuración");
     configItem.addActionListener(e -> {
         board2.pauseGame();
+        Sound.pauseBackground();
         ConfigDialog dialog = new ConfigDialog(this, true);
             dialog.setVisible(true);
             if (dialog.isAccepted()) {
             board2.setDelta(dialog.getDelta());
+            board2.setPlayerName(dialog.getPlayerName());
         }
+            Sound.resumeBackground();
             board2.resumeGame();
     });
     jMenu1.add(configItem);
 
-    // Conectar menú Acerca De
+    //Acerca De
     JMenuItem aboutItem = new JMenuItem("Acerca de");
     aboutItem.addActionListener(e -> {
         board2.pauseGame();
+        Sound.pauseBackground();
+
         AboutDialog dialog = new AboutDialog(this, true);
         dialog.setVisible(true);
         board2.resumeGame();
+        Sound.resumeBackground();
+
     });
     
     jMenu2.add(aboutItem);
